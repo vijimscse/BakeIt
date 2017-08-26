@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.udacity.bakeit.R;
 import com.udacity.bakeit.dto.Recipe;
+import com.udacity.bakeit.listeners.IRecipeClickListener;
 
 import java.util.List;
 
@@ -18,9 +19,11 @@ import java.util.List;
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
     private Context mContext;
     private List<Recipe> mRecipeList;
+    private IRecipeClickListener mRecipeClickListener;
 
-    public RecipeListAdapter(Context context, List<Recipe> recipeList) {
+    public RecipeListAdapter(Context context, IRecipeClickListener recipeClickListener, List<Recipe> recipeList) {
         mContext = context;
+        mRecipeClickListener = recipeClickListener;
         mRecipeList = recipeList;
     }
 
@@ -29,7 +32,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recipe_list_item, parent, false);
 
-        return new RecipeViewHolder(itemView);
+        return new RecipeViewHolder(itemView, mRecipeClickListener);
     }
 
     @Override

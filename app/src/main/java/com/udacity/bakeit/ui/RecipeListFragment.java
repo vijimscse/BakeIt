@@ -14,6 +14,7 @@ import com.udacity.bakeit.adapter.RecipeListAdapter;
 import com.udacity.bakeit.base.BaseFragment;
 import com.udacity.bakeit.dto.Recipe;
 import com.udacity.bakeit.io.IOManager;
+import com.udacity.bakeit.listeners.IRecipeClickListener;
 import com.udacity.bakeit.utils.DialogUtility;
 import com.udacity.bakeit.utils.IBundleKeys;
 import com.udacity.bakeit.utils.NetworkUtility;
@@ -31,7 +32,7 @@ import retrofit2.Response;
 /**
  * Created by VijayaLakshmi.IN on 8/26/2017.
  */
-public class RecipeListFragment extends BaseFragment {
+public class RecipeListFragment extends BaseFragment implements IRecipeClickListener {
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -130,7 +131,7 @@ public class RecipeListFragment extends BaseFragment {
      * Initialises the views
      */
     private void initViews() {
-        mRecyclerListAdapter = new RecipeListAdapter(getActivity(), mRecipeList);
+        mRecyclerListAdapter = new RecipeListAdapter(getActivity(), this, mRecipeList);
         mRecyclerView.setAdapter(mRecyclerListAdapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), mGridColumnCount));
 
@@ -143,5 +144,10 @@ public class RecipeListFragment extends BaseFragment {
         super.onSaveInstanceState(outState);
 
         outState.putParcelableArrayList(IBundleKeys.RECIPE_LIST, mRecipeList);
+    }
+
+    @Override
+    public void onRecipeClick(int position) {
+        //TODO: Launch Recipe details screen.
     }
 }
