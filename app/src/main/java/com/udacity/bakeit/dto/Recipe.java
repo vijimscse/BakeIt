@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class RecipeList implements Parcelable {
+public class Recipe implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -30,7 +30,7 @@ public class RecipeList implements Parcelable {
     @Expose
     private String image;
 
-    protected RecipeList(Parcel in) {
+    protected Recipe(Parcel in) {
         id = in.readInt();
         name = in.readString();
         servings = in.readInt();
@@ -50,15 +50,15 @@ public class RecipeList implements Parcelable {
         return 0;
     }
 
-    public static final Creator<RecipeList> CREATOR = new Creator<RecipeList>() {
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
         @Override
-        public RecipeList createFromParcel(Parcel in) {
-            return new RecipeList(in);
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
         }
 
         @Override
-        public RecipeList[] newArray(int size) {
-            return new RecipeList[size];
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
         }
     };
 
