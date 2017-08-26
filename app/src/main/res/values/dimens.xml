@@ -3,5 +3,6 @@
     <dimen name="grid_item_spacing">10dp</dimen>
     <dimen name="common_padding">16dp</dimen>
     <dimen name="recipe_list_item_text_size">20sp</dimen>
-    <dimen name="common_drawable_padding">10dp</dimen>
+    <dimen name="common_drawable_padding">16dp</dimen>
+    <dimen name="card_view_radius">4dp</dimen>
 </resources>

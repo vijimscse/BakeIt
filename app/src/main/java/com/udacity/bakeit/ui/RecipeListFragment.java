@@ -42,7 +42,7 @@ public class RecipeListFragment extends BaseFragment {
     @BindInt(R.integer.grid_coulmn_count)
     int mGridColumnCount;
 
-    private List<Recipe> mRecipeList = new ArrayList<>();
+    private ArrayList<Recipe> mRecipeList = new ArrayList<>();
     private RecipeListAdapter mRecyclerListAdapter;
 
 
@@ -64,6 +64,59 @@ public class RecipeListFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        restoreDataFromBundle(savedInstanceState);
+
+        if (getActivity() != null ) {
+            initViews();
+
+            if (mRecipeList == null || mRecipeList.isEmpty()) {
+                if (NetworkUtility.isInternetConnected(getActivity())) {
+                    showProgressBar();
+                    IOManager.requestRecipeList(new Callback<List<Recipe>>() {
+                        @Override
+                        public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                            hideProgressBar();
+                            mRecipeList.clear();
+                            mRecipeList.addAll(response.body());
+                            mRecyclerListAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                            hideProgressBar();
+                            DialogUtility.showToast(getActivity(), getString(R.string.generic_error));
+                        }
+                    });
+                } else {
+                    hideProgressBar();
+                    DialogUtility.showToast(getActivity(), getString(R.string.no_internet_connection));
+                }
+            } else {
+                hideProgressBar();
+            }
+        }
+    }
+
+    /**
+     * Displays the progress bar
+     */
+    private void showProgressBar() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Hides the progress bar
+     */
+    private void hideProgressBar() {
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    /**
+     * Restores the stored data from previous bundle
+     *
+     * @param savedInstanceState
+     */
+    private void restoreDataFromBundle(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             ArrayList<Recipe> movieList = savedInstanceState.getParcelableArrayList(IBundleKeys.RECIPE_LIST);
             mRecipeList.clear();
@@ -71,31 +124,24 @@ public class RecipeListFragment extends BaseFragment {
                 mRecipeList.addAll(movieList);
             }
         }
+    }
 
-        if (getActivity() != null) {
-            mRecyclerListAdapter = new RecipeListAdapter(getActivity(), mRecipeList);
-            mRecyclerView.setAdapter(mRecyclerListAdapter);
-            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), mGridColumnCount));
-            if (NetworkUtility.isInternetConnected(getActivity())) {
-                mProgressBar.setVisibility(View.VISIBLE);
-                IOManager.requestRecipeList(new Callback<List<Recipe>>() {
-                    @Override
-                    public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                        mProgressBar.setVisibility(View.GONE);
-                        mRecipeList.addAll(response.body());
-                        mRecyclerListAdapter.notifyDataSetChanged();
-                    }
+    /**
+     * Initialises the views
+     */
+    private void initViews() {
+        mRecyclerListAdapter = new RecipeListAdapter(getActivity(), mRecipeList);
+        mRecyclerView.setAdapter(mRecyclerListAdapter);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), mGridColumnCount));
 
-                    @Override
-                    public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                        mProgressBar.setVisibility(View.GONE);
-                        DialogUtility.showToast(getActivity(), getString(R.string.generic_error));
-                    }
-                });
-            } else {
-                mProgressBar.setVisibility(View.GONE);
-                DialogUtility.showToast(getActivity(), getString(R.string.no_internet_connection));
-            }
-        }
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.common_padding);
+        mRecyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels, getActivity()));
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelableArrayList(IBundleKeys.RECIPE_LIST, mRecipeList);
     }
 }

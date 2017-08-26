@@ -16,6 +16,9 @@ public class MainActivity extends BaseActivity {
 
         setContentView(R.layout.activity_main);
 
+        if (savedInstanceState != null) {
+            return;
+        }
         setActivityTitle(R.string.app_name);
         addRecipeListFragment();
     }
