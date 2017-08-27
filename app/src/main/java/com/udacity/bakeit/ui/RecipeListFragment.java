@@ -1,5 +1,6 @@
 package com.udacity.bakeit.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,7 +15,7 @@ import com.udacity.bakeit.adapter.RecipeListAdapter;
 import com.udacity.bakeit.base.BaseFragment;
 import com.udacity.bakeit.dto.Recipe;
 import com.udacity.bakeit.io.IOManager;
-import com.udacity.bakeit.listeners.IRecipeClickListener;
+import com.udacity.bakeit.listeners.IRecipeListItemClickListener;
 import com.udacity.bakeit.utils.DialogUtility;
 import com.udacity.bakeit.utils.IBundleKeys;
 import com.udacity.bakeit.utils.NetworkUtility;
@@ -29,10 +30,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.udacity.bakeit.utils.IBundleKeys.SELECTED_RECIPE;
+
 /**
  * Created by VijayaLakshmi.IN on 8/26/2017.
  */
-public class RecipeListFragment extends BaseFragment implements IRecipeClickListener {
+public class RecipeListFragment extends BaseFragment implements IRecipeListItemClickListener {
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -50,7 +53,7 @@ public class RecipeListFragment extends BaseFragment implements IRecipeClickList
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recipe_list, container, false);
+        View view = inflater.inflate(R.layout.recycler_view, container, false);
 
         ButterKnife.bind(this, view);
 
@@ -67,7 +70,7 @@ public class RecipeListFragment extends BaseFragment implements IRecipeClickList
 
         restoreDataFromBundle(savedInstanceState);
 
-        if (getActivity() != null ) {
+        if (getActivity() != null) {
             initViews();
 
             if (mRecipeList == null || mRecipeList.isEmpty()) {
@@ -148,6 +151,11 @@ public class RecipeListFragment extends BaseFragment implements IRecipeClickList
 
     @Override
     public void onRecipeClick(int position) {
-        //TODO: Launch Recipe details screen.
+        Intent intent = new Intent(getActivity(), RecipeDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(SELECTED_RECIPE, mRecipeList.get(position));
+        intent.putExtras(bundle);
+
+        startActivity(intent);
     }
 }

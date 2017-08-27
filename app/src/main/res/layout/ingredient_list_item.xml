@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ingredient_card_view"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/common_padding"
+    app:cardCornerRadius="@dimen/card_view_radius">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/common_padding"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/recipe_list_item_text_size"
+            android:text="@string/ingredient_title"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="3dp"
+            android:layout_marginTop="@dimen/common_padding"
+            android:layout_marginLeft="@dimen/common_padding"
+            android:textSize="@dimen/recipe_list_item_text_size"
+            tools:text="sdfsdf"
+            android:id="@+id/ingredient_name"/>
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

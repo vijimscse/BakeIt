@@ -47,4 +47,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             throw new IllegalStateException("layoutResID can't be zero");
         }
     }
+
+    protected void setActivityTitle(String title) {
+        mToolBar.setTitle(title);
+    }
 }

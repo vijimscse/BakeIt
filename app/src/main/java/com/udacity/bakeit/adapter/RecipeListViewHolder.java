@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.udacity.bakeit.R;
-import com.udacity.bakeit.listeners.IRecipeClickListener;
+import com.udacity.bakeit.listeners.IRecipeListItemClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -15,14 +15,14 @@ import butterknife.OnClick;
  * Created by VijayaLakshmi.IN on 8/26/2017.
  */
 
-public class RecipeViewHolder extends RecyclerView.ViewHolder {
+public class RecipeListViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.recipe_name)
     TextView mRecipeName;
 
-    private IRecipeClickListener mRecipeClickListener;
+    private IRecipeListItemClickListener mRecipeClickListener;
 
-    public RecipeViewHolder(View itemView, IRecipeClickListener recipeClickListener) {
+    public RecipeListViewHolder(View itemView, IRecipeListItemClickListener recipeClickListener) {
         super(itemView);
 
         mRecipeClickListener = recipeClickListener;

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.udacity.bakeit.R;
 import com.udacity.bakeit.dto.Recipe;
-import com.udacity.bakeit.listeners.IRecipeClickListener;
+import com.udacity.bakeit.listeners.IRecipeListItemClickListener;
 
 import java.util.List;
 
@@ -16,27 +16,27 @@ import java.util.List;
  * Created by VijayaLakshmi.IN on 8/26/2017.
  */
 
-public class RecipeListAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
+public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListViewHolder> {
     private Context mContext;
     private List<Recipe> mRecipeList;
-    private IRecipeClickListener mRecipeClickListener;
+    private IRecipeListItemClickListener mRecipeClickListener;
 
-    public RecipeListAdapter(Context context, IRecipeClickListener recipeClickListener, List<Recipe> recipeList) {
+    public RecipeListAdapter(Context context, IRecipeListItemClickListener recipeClickListener, List<Recipe> recipeList) {
         mContext = context;
         mRecipeClickListener = recipeClickListener;
         mRecipeList = recipeList;
     }
 
     @Override
-    public RecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecipeListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recipe_list_item, parent, false);
 
-        return new RecipeViewHolder(itemView, mRecipeClickListener);
+        return new RecipeListViewHolder(itemView, mRecipeClickListener);
     }
 
     @Override
-    public void onBindViewHolder(RecipeViewHolder holder, int position) {
+    public void onBindViewHolder(RecipeListViewHolder holder, int position) {
         Recipe recipe = mRecipeList.get(position);
 
         holder.mRecipeName.setText(recipe.getName());

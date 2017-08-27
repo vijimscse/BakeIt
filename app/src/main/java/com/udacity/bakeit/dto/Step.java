@@ -25,7 +25,7 @@ public class Step implements Parcelable {
     @Expose
     private String thumbnailURL;
 
-    protected Step(Parcel in) {
+    public Step(Parcel in) {
         id = in.readInt();
         shortDescription = in.readString();
         description = in.readString();
