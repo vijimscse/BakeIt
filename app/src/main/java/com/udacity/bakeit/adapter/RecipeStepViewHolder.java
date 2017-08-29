@@ -31,6 +31,6 @@ public class RecipeStepViewHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.step_card_view)
     void onStepClick() {
-        mRecipeClickListener.onStepClick(getAdapterPosition());
+        mRecipeClickListener.onStepClick(getAdapterPosition() - 1);
     }
 }
