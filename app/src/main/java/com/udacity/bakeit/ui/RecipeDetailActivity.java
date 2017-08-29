@@ -49,9 +49,6 @@ public class RecipeDetailActivity extends BaseActivity implements IRecipeStepFra
                     findFragmentById(R.id.recipe_step_details_fragment);
         } else {
             if (findViewById(R.id.steps_ingredients_container) != null) {
-                if (savedInstanceState != null) {
-                    return;
-                }
                 addRecipeStepIngredientListFragment();
             }
         }
