@@ -6,16 +6,8 @@
     android:padding="@dimen/common_padding"
     app:cardCornerRadius="@dimen/card_view_radius">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:layout_margin="@dimen/common_padding"
-        android:textSize="@dimen/recipe_list_item_text_size"
-        android:text="sfsdfsafasf"
-        android:textColor="@android:color/black"
-        android:id="@+id/step_name"/>
 
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView android:id="@+id/player_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </RelativeLayout>

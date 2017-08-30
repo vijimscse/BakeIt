@@ -74,7 +74,7 @@ public class RecipeDetailActivity extends BaseActivity implements IRecipeStepFra
         if (step != null) {
             if (getResources().getBoolean(R.bool.tablet_mode) &&
                     getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                mRecipeStepDetailsFragment.updateStepDetails();
+                mRecipeStepDetailsFragment.updateStepDetails(step);
             } else {
                 addRecipeStepDetailsFragment(R.id.steps_ingredients_container, step);
             }
