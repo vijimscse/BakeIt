@@ -131,6 +131,8 @@ public class RecipeStepDetailsFragment extends BaseFragment {
             playWhenReady = mPlayer.getPlayWhenReady();
             mPlayer.release();
             mPlayer = null;
+
+
         }
     }
 }
