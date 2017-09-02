@@ -62,7 +62,7 @@ public class RecipeDetailActivity extends BaseActivity implements IRecipeStepFra
     }
 
     private void addRecipeStepDetailsFragment(int fragmentViewID, Step step) {
-        mRecipeStepDetailsFragment = RecipeStepDetailsFragment.newInstance();
+        mRecipeStepDetailsFragment = RecipeStepDetailsFragment.newInstance(step);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(fragmentViewID, mRecipeStepDetailsFragment);
         transaction.addToBackStack(null);

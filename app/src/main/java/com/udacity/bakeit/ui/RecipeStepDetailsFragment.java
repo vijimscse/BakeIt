@@ -32,6 +32,7 @@ import butterknife.ButterKnife;
 
 public class RecipeStepDetailsFragment extends BaseFragment {
 
+    private static final String KEY_STEP = "key_step";
     @BindView(R.id.player_view)
     SimpleExoPlayerView mSimpleExoPlayerView;
 
@@ -39,10 +40,20 @@ public class RecipeStepDetailsFragment extends BaseFragment {
     private boolean playWhenReady = true;
     private int currentWindow;
     private long playbackPosition;
-    private String mURIStr;
+    private Step mStep;
 
-    public static RecipeStepDetailsFragment newInstance() {
-        return new RecipeStepDetailsFragment();
+    public static RecipeStepDetailsFragment newInstance(Step step) {
+        final RecipeStepDetailsFragment recipeStepDetailsFragment = new RecipeStepDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(KEY_STEP, step);
+        recipeStepDetailsFragment.setArguments(bundle);
+        return recipeStepDetailsFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mStep = getArguments().getParcelable(KEY_STEP);
     }
 
     @Nullable
@@ -55,7 +66,7 @@ public class RecipeStepDetailsFragment extends BaseFragment {
     }
 
     public void updateStepDetails(Step step) {
-        mURIStr = step.getVideoURL();
+        mStep = step;
         initializePlayer();
     }
 
@@ -70,7 +81,7 @@ public class RecipeStepDetailsFragment extends BaseFragment {
         mPlayer.setPlayWhenReady(playWhenReady);
         mPlayer.seekTo(currentWindow, playbackPosition);
         mSimpleExoPlayerView.requestFocus();
-        Uri uri = Uri.parse(mURIStr);
+        Uri uri = Uri.parse(mStep.getVideoURL());
         MediaSource mediaSource = buildMediaSource(uri);
         mPlayer.prepare(mediaSource, true, false);
     }
