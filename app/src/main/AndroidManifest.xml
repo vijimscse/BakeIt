@@ -21,6 +21,26 @@
         </activity>
 
         <activity android:name=".ui.RecipeDetailActivity"/>
+
+        <receiver android:name=".widget.WidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/recipe_widget_config" />
+        </receiver>
+
+        <activity android:name=".widget.WidgetSettingsActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".widget.StackWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

@@ -5,4 +5,7 @@
     <dimen name="recipe_list_item_text_size">20sp</dimen>
     <dimen name="common_drawable_padding">16dp</dimen>
     <dimen name="card_view_radius">4dp</dimen>
+    <dimen name="widget_default_width">200dp</dimen>
+    <dimen name="widget_default_height">100dp</dimen>
+    <dimen name="widget_margin">8dp</dimen>
 </resources>
