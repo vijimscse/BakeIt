@@ -48,12 +48,15 @@ public class RecipeDetailActivity extends BaseActivity implements IRecipeStepFra
 
             mRecipeStepDetailsFragment = (RecipeStepDetailsFragment) getSupportFragmentManager().
                     findFragmentById(R.id.recipe_step_details_fragment);
+            mRecipeStepDetailsFragment.updateStepDetails(mSelectedRecipe.getSteps().get(0), 0, false, (mSelectedRecipe.getSteps().size() - 1) > 1);
         } else {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.steps_ingredients_container);
-            if (fragment instanceof RecipeStepDetailsFragment) {
-                mRecipeStepDetailsFragment = (RecipeStepDetailsFragment) fragment;
-            }
             if (savedInstanceState != null) {
+                if (fragment == null) {
+                    addRecipeStepIngredientListFragment();
+                } else if (fragment instanceof RecipeStepDetailsFragment) {
+                    mRecipeStepDetailsFragment = (RecipeStepDetailsFragment) fragment;
+                }
                 return;
             }
             if (findViewById(R.id.steps_ingredients_container) != null) {

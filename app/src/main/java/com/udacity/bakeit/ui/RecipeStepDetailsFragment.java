@@ -112,7 +112,9 @@ public class RecipeStepDetailsFragment extends BaseFragment {
             lp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
             mSimpleExoPlayerView.setLayoutParams(lp);
         } else {
-            mRecipeStepClickListener.showToolBar();
+            if (!getResources().getBoolean(R.bool.tablet_mode)) {
+                mRecipeStepClickListener.showToolBar();
+            }
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();
             lp.height = (int) getResources().getDimension(R.dimen.video_view_height);
             lp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
@@ -158,33 +160,35 @@ public class RecipeStepDetailsFragment extends BaseFragment {
     }
 
     public void updateStepDetails(Step step, int currentPosition, boolean hasPrev, boolean hasNext) {
-        mStep = step;
-        mCurrentStepPosition = currentPosition;
-        String stepInstruction = step.getDescription();
+        if (step != null) {
+            mStep = step;
+            mCurrentStepPosition = currentPosition;
+            String stepInstruction = step.getDescription();
 
-        ExoPlayerHandler.getInstance().releasePlayer();
+            ExoPlayerHandler.getInstance().releasePlayer();
 
-        if (!TextUtils.isEmpty(step.getVideoURL())) {
-            mSimpleExoPlayerView.setVisibility(View.VISIBLE);
-        } else {
-            mSimpleExoPlayerView.setVisibility(View.GONE);
-        }
-        if (mStepInstructionsView != null) {
-            if (!TextUtils.isEmpty(stepInstruction)) {
-                mStepInstructionsView.setVisibility(View.VISIBLE);
-                mStepInstructionsView.setText(stepInstruction);
+            if (!TextUtils.isEmpty(step.getVideoURL())) {
+                mSimpleExoPlayerView.setVisibility(View.VISIBLE);
             } else {
-                mStepInstructionsView.setVisibility(View.GONE);
+                mSimpleExoPlayerView.setVisibility(View.GONE);
             }
-        }
-        if (mPrev != null && mNext != null) {
-            mPrev.setVisibility(hasPrev ? View.VISIBLE : View.GONE);
-            mNext.setVisibility(hasNext ? View.VISIBLE : View.GONE);
-        }
+            if (mStepInstructionsView != null) {
+                if (!TextUtils.isEmpty(stepInstruction)) {
+                    mStepInstructionsView.setVisibility(View.VISIBLE);
+                    mStepInstructionsView.setText(stepInstruction);
+                } else {
+                    mStepInstructionsView.setVisibility(View.GONE);
+                }
+            }
+            if (mPrev != null && mNext != null) {
+                mPrev.setVisibility(hasPrev ? View.VISIBLE : View.GONE);
+                mNext.setVisibility(hasNext ? View.VISIBLE : View.GONE);
+            }
 
-        ExoPlayerHandler.getInstance().prepare(getActivity(), Uri.parse(mStep.getVideoURL()),
-                mSimpleExoPlayerView);
-        ExoPlayerHandler.getInstance().putForeground();
+            ExoPlayerHandler.getInstance().prepare(getActivity(), Uri.parse(mStep.getVideoURL()),
+                    mSimpleExoPlayerView);
+            ExoPlayerHandler.getInstance().putForeground();
+        }
     }
 
     @Override

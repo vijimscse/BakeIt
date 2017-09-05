@@ -28,14 +28,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.setContentView(R.layout.activity_base);
 
         initialiseContainer(layoutResID);
-
-        ButterKnife.bind(this);
     }
 
     private void initialiseContainer(@LayoutRes int layoutResID) {
         if (layoutResID != 0) {
             mFragmentContainer = (ViewGroup) findViewById(R.id.fragment_container);
             mFragmentContainer.addView(getLayoutInflater().inflate(layoutResID, null, false));
+            ButterKnife.bind(this);
         } else {
             throw new IllegalStateException("layoutResID can't be zero");
         }
