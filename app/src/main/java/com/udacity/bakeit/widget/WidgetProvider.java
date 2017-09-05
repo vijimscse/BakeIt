@@ -16,8 +16,8 @@ import com.udacity.bakeit.R;
 
 
 public class WidgetProvider extends AppWidgetProvider {
-    public static final String TOAST_ACTION = "com.example.android.stackwidget.TOAST_ACTION";
-    public static final String EXTRA_ITEM = "com.example.android.stackwidget.EXTRA_ITEM";
+    public static final String TOAST_ACTION = "com.udacity.bakeit.android.stackwidget.TOAST_ACTION";
+    public static final String EXTRA_ITEM = "com.udacity.bakeit.android.stackwidget.EXTRA_ITEM";
 
     @Override
     public void onReceive(Context context, Intent intent) {

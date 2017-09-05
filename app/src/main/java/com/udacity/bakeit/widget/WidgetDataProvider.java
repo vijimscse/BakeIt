@@ -29,11 +29,4 @@ public class WidgetDataProvider {
     public void setIngredientList(ArrayList<Ingredient> mIngredientList) {
         this.mIngredientList = mIngredientList;
     }
-
-    public void clearIngredients() {
-        if (mIngredientList != null) {
-            mIngredientList.clear();
-            mIngredientList = null;
-        }
-    }
 }
