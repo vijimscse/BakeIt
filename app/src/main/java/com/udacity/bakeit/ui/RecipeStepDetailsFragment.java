@@ -1,30 +1,30 @@
 package com.udacity.bakeit.ui;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 import com.udacity.bakeit.R;
 import com.udacity.bakeit.base.BaseFragment;
 import com.udacity.bakeit.dto.Step;
+import com.udacity.bakeit.listeners.IRecipeStepFragmentListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Optional;
 
 /**
  * Created by VijayaLakshmi.IN on 8/27/2017.
@@ -33,117 +33,187 @@ import butterknife.ButterKnife;
 public class RecipeStepDetailsFragment extends BaseFragment {
 
     private static final String KEY_STEP = "key_step";
+    private static final String KEY_CURRENT_POSITION = "key_current_pos";
+    private static final String KEY_HAS_NEXT = "key_has_next";
+    private static final String KEY_HAS_PREV = "key_has_prev";
+
     @BindView(R.id.player_view)
     SimpleExoPlayerView mSimpleExoPlayerView;
 
-    private SimpleExoPlayer mPlayer;
-    private boolean playWhenReady = true;
-    private int currentWindow;
-    private long playbackPosition;
-    private Step mStep;
+    @Nullable
+    @BindView(R.id.recipe_step_instructions)
+    TextView mStepInstructionsView;
 
-    public static RecipeStepDetailsFragment newInstance(Step step) {
+    @Nullable
+    @BindView(R.id.ingredient_prev)
+    Button mPrev;
+
+    @Nullable
+    @BindView(R.id.ingredient_next)
+    Button mNext;
+
+    private int mCurrentStepPosition;
+    private boolean mHasPrev;
+    private boolean mHasNext;
+    private Step mStep;
+    private IRecipeStepFragmentListener mRecipeStepClickListener;
+
+    public static RecipeStepDetailsFragment newInstance(Step step, int currentPosition, boolean hasPrev, boolean hasNext) {
         final RecipeStepDetailsFragment recipeStepDetailsFragment = new RecipeStepDetailsFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(KEY_STEP, step);
+        bundle.putInt(KEY_CURRENT_POSITION, currentPosition);
+        bundle.putBoolean(KEY_HAS_PREV, hasPrev);
+        bundle.putBoolean(KEY_HAS_NEXT, hasNext);
         recipeStepDetailsFragment.setArguments(bundle);
         return recipeStepDetailsFragment;
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        castToRecipeStepClickListener(context);
+    }
+
+    private void castToRecipeStepClickListener(Context context) {
+        if (!(context instanceof IRecipeStepFragmentListener)) {
+            throw new IllegalStateException(((FragmentActivity) context).getClass().getSimpleName() + "must implement" +
+                    IRecipeStepFragmentListener.class.getSimpleName());
+        }
+        mRecipeStepClickListener = (IRecipeStepFragmentListener) context;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mStep = getArguments().getParcelable(KEY_STEP);
+
+        final Bundle bundle = getArguments();
+
+        if (bundle != null) {
+            mStep = bundle.getParcelable(KEY_STEP);
+            mCurrentStepPosition = bundle.getInt(KEY_CURRENT_POSITION);
+            mHasPrev = bundle.getBoolean(KEY_HAS_PREV);
+            mHasNext = bundle.getBoolean(KEY_HAS_NEXT);
+        }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_step_details, container, false);
-
         ButterKnife.bind(this, view);
+
+        if ((!getResources().getBoolean(R.bool.tablet_mode)) &&
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mRecipeStepClickListener.hideToolBar();
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();
+            lp.height = RelativeLayout.LayoutParams.MATCH_PARENT;
+            lp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+            mSimpleExoPlayerView.setLayoutParams(lp);
+        } else {
+            mRecipeStepClickListener.showToolBar();
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();
+            lp.height = (int) getResources().getDimension(R.dimen.video_view_height);
+            lp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+            mSimpleExoPlayerView.setLayoutParams(lp);
+            mSimpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
+        }
+
+        restoreDataFromBundle(savedInstanceState);
+        updateStepDetails(mStep, mCurrentStepPosition, mHasPrev, mHasNext);
+
         return view;
     }
 
-    public void updateStepDetails(Step step) {
-        mStep = step;
-        initializePlayer();
-    }
-
-    private void initializePlayer() {
-
-        mPlayer = ExoPlayerFactory.newSimpleInstance(
-                new DefaultRenderersFactory(getActivity()),
-                new DefaultTrackSelector(), new DefaultLoadControl());
-
-        mSimpleExoPlayerView.setPlayer(mPlayer);
-
-        mPlayer.setPlayWhenReady(playWhenReady);
-        mPlayer.seekTo(currentWindow, playbackPosition);
-        mSimpleExoPlayerView.requestFocus();
-        Uri uri = Uri.parse(mStep.getVideoURL());
-        MediaSource mediaSource = buildMediaSource(uri);
-        mPlayer.prepare(mediaSource, true, false);
-    }
-
-    private MediaSource buildMediaSource(Uri uri) {
-        return new ExtractorMediaSource(uri,
-                new DefaultHttpDataSourceFactory("ua"),
-                new DefaultExtractorsFactory(), null, null);
+    private void restoreDataFromBundle(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            mStep = savedInstanceState.getParcelable(KEY_STEP);
+            mCurrentStepPosition = savedInstanceState.getInt(KEY_CURRENT_POSITION);
+            mHasPrev = savedInstanceState.getBoolean(KEY_HAS_PREV);
+            mHasNext = savedInstanceState.getBoolean(KEY_HAS_NEXT);
+        }
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        if (Util.SDK_INT > 23) {
-            initializePlayer();
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelable(KEY_STEP, mStep);
+        outState.putInt(KEY_CURRENT_POSITION, mCurrentStepPosition);
+        outState.putBoolean(KEY_HAS_PREV, mHasPrev);
+        outState.putBoolean(KEY_HAS_NEXT, mHasNext);
+    }
+
+    @Optional
+    @OnClick(R.id.ingredient_prev)
+    public void onPrev() {
+        mRecipeStepClickListener.onPrev(mCurrentStepPosition);
+    }
+
+    @Optional
+    @OnClick(R.id.ingredient_next)
+    public void onNext() {
+        mRecipeStepClickListener.onNext(mCurrentStepPosition);
+    }
+
+    public void updateStepDetails(Step step, int currentPosition, boolean hasPrev, boolean hasNext) {
+        mStep = step;
+        mCurrentStepPosition = currentPosition;
+        String stepInstruction = step.getDescription();
+
+        ExoPlayerHandler.getInstance().releasePlayer();
+
+        if (!TextUtils.isEmpty(step.getVideoURL())) {
+            mSimpleExoPlayerView.setVisibility(View.VISIBLE);
+        } else {
+            mSimpleExoPlayerView.setVisibility(View.GONE);
         }
+        if (mStepInstructionsView != null) {
+            if (!TextUtils.isEmpty(stepInstruction)) {
+                mStepInstructionsView.setVisibility(View.VISIBLE);
+                mStepInstructionsView.setText(stepInstruction);
+            } else {
+                mStepInstructionsView.setVisibility(View.GONE);
+            }
+        }
+        if (mPrev != null && mNext != null) {
+            mPrev.setVisibility(hasPrev ? View.VISIBLE : View.GONE);
+            mNext.setVisibility(hasNext ? View.VISIBLE : View.GONE);
+        }
+
+        ExoPlayerHandler.getInstance().prepare(getActivity(), Uri.parse(mStep.getVideoURL()),
+                mSimpleExoPlayerView);
+        ExoPlayerHandler.getInstance().putForeground();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        hideSystemUi();
-        if ((Util.SDK_INT <= 23 || mPlayer == null)) {
-            initializePlayer();
-        }
-    }
 
-    @SuppressLint("InlinedApi")
-    private void hideSystemUi() {
-        mSimpleExoPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        ExoPlayerHandler.getInstance().putForeground();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
-        }
+
+        ExoPlayerHandler.getInstance().putBackground();
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-        }
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        ExoPlayerHandler.getInstance().putBackground();
+        ExoPlayerHandler.getInstance().releasePlayer();
     }
 
-    private void releasePlayer() {
-        if (mPlayer != null) {
-            playbackPosition = mPlayer.getCurrentPosition();
-            currentWindow = mPlayer.getCurrentWindowIndex();
-            playWhenReady = mPlayer.getPlayWhenReady();
-            mPlayer.release();
-            mPlayer = null;
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
 
-
-        }
+        ExoPlayerHandler.getInstance().putBackground();
+        ExoPlayerHandler.getInstance().releasePlayer();
     }
 }

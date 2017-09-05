@@ -3,6 +3,7 @@ package com.udacity.bakeit.ui;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 import com.udacity.bakeit.R;
@@ -48,6 +49,13 @@ public class RecipeDetailActivity extends BaseActivity implements IRecipeStepFra
             mRecipeStepDetailsFragment = (RecipeStepDetailsFragment) getSupportFragmentManager().
                     findFragmentById(R.id.recipe_step_details_fragment);
         } else {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.steps_ingredients_container);
+            if (fragment instanceof RecipeStepDetailsFragment) {
+                mRecipeStepDetailsFragment = (RecipeStepDetailsFragment) fragment;
+            }
+            if (savedInstanceState != null) {
+                return;
+            }
             if (findViewById(R.id.steps_ingredients_container) != null) {
                 addRecipeStepIngredientListFragment();
             }
@@ -61,8 +69,9 @@ public class RecipeDetailActivity extends BaseActivity implements IRecipeStepFra
         transaction.commit();
     }
 
-    private void addRecipeStepDetailsFragment(int fragmentViewID, Step step) {
-        mRecipeStepDetailsFragment = RecipeStepDetailsFragment.newInstance(step);
+    private void addRecipeStepDetailsFragment(int fragmentViewID, Step step,
+                                              int currentPosition, boolean hasPrev, boolean hasNext) {
+        mRecipeStepDetailsFragment = RecipeStepDetailsFragment.newInstance(step, currentPosition, hasPrev, hasNext);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(fragmentViewID, mRecipeStepDetailsFragment);
         transaction.addToBackStack(null);
@@ -70,14 +79,45 @@ public class RecipeDetailActivity extends BaseActivity implements IRecipeStepFra
     }
 
     @Override
-    public void onStepClick(Step step) {
-        if (step != null) {
+    public void onStepClick(int position) {
+        if (position >= 0) {
             if (getResources().getBoolean(R.bool.tablet_mode) &&
                     getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                mRecipeStepDetailsFragment.updateStepDetails(step);
+                mRecipeStepDetailsFragment.updateStepDetails(mSelectedRecipe.getSteps().get(position),
+                        position, position > 0, (position < (mSelectedRecipe.getSteps().size() - 1)));
             } else {
-                addRecipeStepDetailsFragment(R.id.steps_ingredients_container, step);
+                addRecipeStepDetailsFragment(R.id.steps_ingredients_container,
+                        mSelectedRecipe.getSteps().get(position),
+                        position, position > 0, (position < (mSelectedRecipe.getSteps().size() - 1)));
             }
         }
+    }
+
+    @Override
+    public void onNext(int currentPosition) {
+        int nextPos = currentPosition + 1;
+        if (nextPos < mSelectedRecipe.getSteps().size() && mRecipeStepDetailsFragment != null) {
+            mRecipeStepDetailsFragment.updateStepDetails(mSelectedRecipe.getSteps().get(nextPos),
+                    nextPos, nextPos > 0, (nextPos < (mSelectedRecipe.getSteps().size() - 1)));
+        }
+    }
+
+    @Override
+    public void onPrev(int currentPosition) {
+        int prevPos = currentPosition - 1;
+        if (prevPos >= 0 && mRecipeStepDetailsFragment != null) {
+            mRecipeStepDetailsFragment.updateStepDetails(mSelectedRecipe.getSteps().get(prevPos),
+                    prevPos, prevPos > 0, (prevPos < (mSelectedRecipe.getSteps().size() - 1)));
+        }
+    }
+
+    @Override
+    public void hideToolBar() {
+        hideTitleBar();
+    }
+
+    @Override
+    public void showToolBar() {
+        showTitleBar();
     }
 }

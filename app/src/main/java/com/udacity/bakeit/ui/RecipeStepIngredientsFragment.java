@@ -90,6 +90,6 @@ public class RecipeStepIngredientsFragment extends BaseFragment implements IReci
 
     @Override
     public void onStepClick(int position) {
-        mRecipeStepClickListener.onStepClick(mSelectedRecipe.getSteps().get(position));
+        mRecipeStepClickListener.onStepClick(position);
     }
 }

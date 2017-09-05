@@ -1,13 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="@dimen/common_padding"
-    app:cardCornerRadius="@dimen/card_view_radius">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView android:id="@+id/player_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</RelativeLayout>
+        android:layout_height="wrap_content"
+        android:padding="@dimen/common_padding">
+
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/player_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/video_view_height" />
+
+        <TextView
+            android:id="@+id/recipe_step_instructions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/player_view" />
+
+        <Button
+            android:id="@+id/ingredient_prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/recipe_step_instructions"
+            android:layout_margin="@dimen/common_padding"
+            android:padding="@dimen/common_padding"
+            android:textSize="@dimen/recipe_instruction_text_size"
+            android:text="Prev" />
+
+        <Button
+            android:id="@+id/ingredient_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/recipe_step_instructions"
+            android:layout_margin="@dimen/common_padding"
+            android:padding="@dimen/common_padding"
+            android:text="Next" />
+    </RelativeLayout>
+</ScrollView>

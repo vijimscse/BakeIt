@@ -122,10 +122,10 @@ public class RecipeListFragment extends BaseFragment implements IRecipeListItemC
      */
     private void restoreDataFromBundle(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            ArrayList<Recipe> movieList = savedInstanceState.getParcelableArrayList(IBundleKeys.RECIPE_LIST);
+            ArrayList<Recipe> recipeList = savedInstanceState.getParcelableArrayList(IBundleKeys.RECIPE_LIST);
             mRecipeList.clear();
-            if (movieList != null && !movieList.isEmpty()) {
-                mRecipeList.addAll(movieList);
+            if (recipeList != null && !recipeList.isEmpty()) {
+                mRecipeList.addAll(recipeList);
             }
         }
     }

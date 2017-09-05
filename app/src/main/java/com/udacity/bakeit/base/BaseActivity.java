@@ -4,6 +4,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.udacity.bakeit.R;
@@ -50,5 +51,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void setActivityTitle(String title) {
         mToolBar.setTitle(title);
+    }
+
+    protected void hideTitleBar() {
+        mToolBar.setVisibility(View.GONE);
+    }
+
+    protected void showTitleBar() {
+        mToolBar.setVisibility(View.VISIBLE);
     }
 }
