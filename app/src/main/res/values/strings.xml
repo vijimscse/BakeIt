@@ -7,5 +7,6 @@
     <string name="submit_text">Submit</string>
     <string name="empty_view_text">There are no ingredients</string>
     <string name="default_ingredients_title">Ingredients</string>
+    <string name="there_is_no_video_demo_for_this_step">There is no video demo for this step</string>
 
 </resources>

@@ -11,10 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.udacity.bakeit.R;
 import com.udacity.bakeit.base.BaseFragment;
@@ -39,6 +39,9 @@ public class RecipeStepDetailsFragment extends BaseFragment {
 
     @BindView(R.id.player_view)
     SimpleExoPlayerView mSimpleExoPlayerView;
+
+    @BindView(R.id.no_video_content)
+    TextView mNoVideoContentView;
 
     @Nullable
     @BindView(R.id.recipe_step_instructions)
@@ -106,26 +109,43 @@ public class RecipeStepDetailsFragment extends BaseFragment {
 
         if ((!getResources().getBoolean(R.bool.tablet_mode)) &&
                 getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mRecipeStepClickListener.hideToolBar();
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();
-            lp.height = RelativeLayout.LayoutParams.MATCH_PARENT;
-            lp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-            mSimpleExoPlayerView.setLayoutParams(lp);
+            supportUIforPhoneLandscape();
         } else {
             if (!getResources().getBoolean(R.bool.tablet_mode)) {
                 mRecipeStepClickListener.showToolBar();
             }
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();
-            lp.height = (int) getResources().getDimension(R.dimen.video_view_height);
-            lp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-            mSimpleExoPlayerView.setLayoutParams(lp);
-            mSimpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
+            supportUIforTablet();
         }
 
         restoreDataFromBundle(savedInstanceState);
         updateStepDetails(mStep, mCurrentStepPosition, mHasPrev, mHasNext);
 
         return view;
+    }
+
+    private void supportUIforTablet() {
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();
+        lp.height = (int) getResources().getDimension(R.dimen.video_view_height);
+        lp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+        mSimpleExoPlayerView.setLayoutParams(lp);
+
+        FrameLayout.LayoutParams noVideoContentLp = (FrameLayout.LayoutParams) mNoVideoContentView.getLayoutParams();
+        noVideoContentLp.height = (int) getResources().getDimension(R.dimen.video_view_height);
+        noVideoContentLp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+        mNoVideoContentView.setLayoutParams(lp);
+    }
+
+    private void supportUIforPhoneLandscape() {
+        mRecipeStepClickListener.hideToolBar();
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();
+        lp.height = RelativeLayout.LayoutParams.MATCH_PARENT;
+        lp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+        mSimpleExoPlayerView.setLayoutParams(lp);
+
+        FrameLayout.LayoutParams noVideoContentLp = (FrameLayout.LayoutParams) mNoVideoContentView.getLayoutParams();
+        noVideoContentLp.height = RelativeLayout.LayoutParams.MATCH_PARENT;
+        noVideoContentLp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+        mNoVideoContentView.setLayoutParams(lp);
     }
 
     private void restoreDataFromBundle(Bundle savedInstanceState) {
@@ -169,8 +189,10 @@ public class RecipeStepDetailsFragment extends BaseFragment {
 
             if (!TextUtils.isEmpty(step.getVideoURL())) {
                 mSimpleExoPlayerView.setVisibility(View.VISIBLE);
+                mNoVideoContentView.setVisibility(View.GONE);
             } else {
                 mSimpleExoPlayerView.setVisibility(View.GONE);
+                mNoVideoContentView.setVisibility(View.VISIBLE);
             }
             if (mStepInstructionsView != null) {
                 if (!TextUtils.isEmpty(stepInstruction)) {

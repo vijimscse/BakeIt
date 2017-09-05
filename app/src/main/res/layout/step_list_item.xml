@@ -15,7 +15,6 @@
         android:gravity="center_vertical"
         android:layout_margin="@dimen/common_padding"
         android:textSize="@dimen/recipe_list_item_text_size"
-        android:text="sfsdfsafasf"
         android:textColor="@android:color/black"
         android:id="@+id/step_name"/>
 

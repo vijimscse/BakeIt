@@ -4,9 +4,27 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/player_view"
-        app:resize_mode="fill"
-        android:layout_width="2000dp"
-        android:layout_height="match_parent" />
+    <FrameLayout
+        android:id="@+id/player_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/player_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/video_view_height" />
+
+        <TextView
+            android:id="@+id/no_video_content"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/video_view_height"
+            android:gravity="center"
+            android:layout_margin="@dimen/common_padding"
+            android:background="@drawable/no_video_content_border"
+            android:text="@string/there_is_no_video_demo_for_this_step"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
 </RelativeLayout>
