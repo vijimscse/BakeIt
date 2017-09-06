@@ -30,7 +30,9 @@ public class RecipeDetailActivity extends BaseActivity implements IRecipeStepFra
         setContentView(R.layout.activity_recipe_details);
 
         Bundle bundle = getIntent().getExtras();
-        mSelectedRecipe = bundle.getParcelable(IBundleKeys.SELECTED_RECIPE);
+        if (bundle != null) {
+            mSelectedRecipe = bundle.getParcelable(IBundleKeys.SELECTED_RECIPE);
+        }
         if (mSelectedRecipe == null) {
             new IllegalStateException("Please pass in the selected recipe");
         } else {

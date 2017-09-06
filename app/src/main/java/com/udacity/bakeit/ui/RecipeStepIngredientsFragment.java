@@ -78,13 +78,15 @@ public class RecipeStepIngredientsFragment extends BaseFragment implements IReci
     public void updateUI(Bundle bundle) {
         if (getActivity() != null && bundle != null) {
             mSelectedRecipe = bundle.getParcelable(IBundleKeys.SELECTED_RECIPE);
-            mRecyclerView.setAdapter(new RecipeStepListAdapter(getActivity(), this,
-                    mSelectedRecipe.getSteps(), mSelectedRecipe.getIngredients()));
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),
-                    layoutManager.getOrientation());
-            mRecyclerView.addItemDecoration(dividerItemDecoration);
+            if (mSelectedRecipe != null) {
+                mRecyclerView.setAdapter(new RecipeStepListAdapter(getActivity(), this,
+                        mSelectedRecipe.getSteps(), mSelectedRecipe.getIngredients()));
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),
+                        layoutManager.getOrientation());
+                mRecyclerView.addItemDecoration(dividerItemDecoration);
+            }
         }
     }
 
