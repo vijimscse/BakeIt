@@ -8,7 +8,6 @@ import com.udacity.bakeit.base.BaseActivity;
 
 public class MainActivity extends BaseActivity {
 
-    private RecipeListFragment mRecipeListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +23,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void addRecipeListFragment() {
-        mRecipeListFragment = RecipeListFragment.newInstance();
+        RecipeListFragment recipeListFragment = RecipeListFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.fragment_container, mRecipeListFragment);
+        transaction.add(R.id.fragment_container, recipeListFragment);
         transaction.commit();
     }
 }

@@ -34,7 +34,7 @@ public class RecipeDetailActivity extends BaseActivity implements IRecipeStepFra
             mSelectedRecipe = bundle.getParcelable(IBundleKeys.SELECTED_RECIPE);
         }
         if (mSelectedRecipe == null) {
-            new IllegalStateException("Please pass in the selected recipe");
+            throw new IllegalStateException("Please pass in the selected recipe");
         } else {
             setActivityTitle(mSelectedRecipe.getName());
         }

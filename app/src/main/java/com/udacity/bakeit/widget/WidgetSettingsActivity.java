@@ -65,6 +65,9 @@ public class WidgetSettingsActivity extends ListActivity {
     public void onSubmit() {
         if (getListView().getCheckedItemPosition() >= 0) {
             Recipe recipe = mRecipeListAdapter.getItem(getListView().getCheckedItemPosition());
+            if (recipe == null) {
+                return;
+            }
             Log.d(TAG, "recipe " + recipe.getName());
             ArrayList<Ingredient> ingredientList = (ArrayList<Ingredient>) recipe.getIngredients();
             WidgetDataProvider.getInstance().setIngredientList(ingredientList);

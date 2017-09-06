@@ -31,7 +31,6 @@ public class RecipeStepIngredientsFragment extends BaseFragment implements IReci
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
-    private Recipe mSelectedRecipe;
     private IRecipeStepFragmentListener mRecipeStepClickListener;
 
     @Override
@@ -77,10 +76,10 @@ public class RecipeStepIngredientsFragment extends BaseFragment implements IReci
 
     public void updateUI(Bundle bundle) {
         if (getActivity() != null && bundle != null) {
-            mSelectedRecipe = bundle.getParcelable(IBundleKeys.SELECTED_RECIPE);
-            if (mSelectedRecipe != null) {
+            Recipe selectedRecipe = bundle.getParcelable(IBundleKeys.SELECTED_RECIPE);
+            if (selectedRecipe != null) {
                 mRecyclerView.setAdapter(new RecipeStepListAdapter(this,
-                        mSelectedRecipe.getSteps(), mSelectedRecipe.getIngredients()));
+                        selectedRecipe.getSteps(), selectedRecipe.getIngredients()));
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),

@@ -30,7 +30,7 @@ public class WidgetRecipeListAdapter extends ArrayAdapter<Recipe> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        WidgetRecipeViewHolder widgetRecipeViewHolder = null;
+        WidgetRecipeViewHolder widgetRecipeViewHolder;
         if (convertView == null) {
             widgetRecipeViewHolder = new WidgetRecipeViewHolder();
             convertView = LayoutInflater.from(mContext)

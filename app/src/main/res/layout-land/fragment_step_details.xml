@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/player_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/player_container"
+
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        android:id="@+id/player_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="@dimen/video_view_height" />
 
-
-        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-            android:id="@+id/player_view"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/video_view_height" />
-
-        <TextView
-            android:id="@+id/no_video_content"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/video_view_height"
-            android:layout_margin="@dimen/common_padding"
-            android:background="@drawable/black_stroke_border"
-            android:gravity="center"
-            android:text="@string/there_is_no_video_demo_for_this_step"
-            android:textSize="@dimen/no_video_content_text_size"
-            android:textStyle="bold" />
-    </FrameLayout>
-
-</RelativeLayout>
+    <TextView
+        android:id="@+id/no_video_content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/video_view_height"
+        android:layout_margin="@dimen/common_padding"
+        android:background="@drawable/black_stroke_border"
+        android:gravity="center"
+        android:text="@string/there_is_no_video_demo_for_this_step"
+        android:textSize="@dimen/no_video_content_text_size"
+        android:textStyle="bold" />
+</FrameLayout>
