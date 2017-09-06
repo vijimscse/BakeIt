@@ -21,7 +21,7 @@
             android:layout_height="@dimen/video_view_height"
             android:gravity="center"
             android:layout_margin="@dimen/common_padding"
-            android:background="@drawable/no_video_content_border"
+            android:background="@drawable/black_stroke_border"
             android:text="@string/there_is_no_video_demo_for_this_step"
             android:textSize="20sp"
             android:textStyle="bold" />

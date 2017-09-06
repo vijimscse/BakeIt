@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:background="@android:color/white"
-        android:padding="@dimen/common_padding"
+        android:padding="5dp"
         android:textColor="@android:color/black"
         android:textStyle="bold" />
 
@@ -30,8 +30,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:background="@android:color/white"
-        android:padding="@dimen/common_padding"
+        android:background="@drawable/black_stroke_border"
+        android:padding="5dp"
         android:textColor="@android:color/black" />
 
     <TextView
