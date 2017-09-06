@@ -35,7 +35,7 @@ public class WidgetProvider extends AppWidgetProvider {
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_ingredients_list);
             rv.setTextViewText(R.id.ingredients_list_title, context.getString(R.string.default_ingredients_title));
-            rv.setRemoteAdapter(appWidgetId, R.id.ingredients_list, intent);
+            rv.setRemoteAdapter(R.id.ingredients_list, intent);
             rv.setEmptyView(R.id.ingredients_list, R.id.empty_view);
             Intent toastIntent = new Intent(context, WidgetProvider.class);
             toastIntent.setAction(WidgetProvider.TOAST_ACTION);

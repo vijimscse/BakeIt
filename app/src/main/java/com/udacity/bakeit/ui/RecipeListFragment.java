@@ -43,7 +43,7 @@ public class RecipeListFragment extends BaseFragment implements IRecipeListItemC
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
 
-    @BindInt(R.integer.grid_coulmn_count)
+    @BindInt(R.integer.grid_column_count)
     int mGridColumnCount;
 
     private ArrayList<Recipe> mRecipeList = new ArrayList<>();
@@ -134,7 +134,7 @@ public class RecipeListFragment extends BaseFragment implements IRecipeListItemC
      * Initialises the views
      */
     private void initViews() {
-        mRecyclerListAdapter = new RecipeListAdapter(getActivity(), this, mRecipeList);
+        mRecyclerListAdapter = new RecipeListAdapter(this, mRecipeList);
         mRecyclerView.setAdapter(mRecyclerListAdapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), mGridColumnCount));
 

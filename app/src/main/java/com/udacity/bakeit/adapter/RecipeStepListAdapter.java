@@ -1,6 +1,5 @@
 package com.udacity.bakeit.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import java.util.List;
 
 public class RecipeStepListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
     private List<Ingredient> mIngredientList;
     private List<Step> mStepList;
     private IRecipeStepItemClickListener mRecipeStepClickListener;
@@ -27,9 +25,8 @@ public class RecipeStepListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private static final int ITEM_INGREDIENT = 101;
     private static final int ITEM_STEP = 100;
 
-    public RecipeStepListAdapter(Context context, IRecipeStepItemClickListener recipeClickListener,
+    public RecipeStepListAdapter(IRecipeStepItemClickListener recipeClickListener,
                                  List<Step> stepList, List<Ingredient> ingredientList) {
-        mContext = context;
         mRecipeStepClickListener = recipeClickListener;
         mStepList = stepList;
         mIngredientList = ingredientList;

@@ -10,14 +10,14 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:drawableLeft="@mipmap/recipe"
+        android:drawablePadding="@dimen/common_drawable_padding"
         android:drawableStart="@mipmap/recipe"
         android:gravity="center_vertical"
         android:padding="@dimen/common_widget_padding"
-        android:drawablePadding="@dimen/common_drawable_padding"
         android:text="@string/app_name"
-        android:textStyle="bold"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/widget_title_text_size"
-        android:textColor="@android:color/white" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/ingredients_list_title"
@@ -42,10 +42,10 @@
         android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:background="@android:color/white"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
+        android:gravity="center"
         android:text="@string/empty_view_text"
-        android:textSize="@dimen/widget_title_text_size" />
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/widget_title_text_size"
+        android:textStyle="bold" />
 </LinearLayout>

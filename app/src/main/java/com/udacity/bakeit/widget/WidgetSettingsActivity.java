@@ -47,6 +47,12 @@ public class WidgetSettingsActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!NetworkUtility.isInternetConnected(this)) {
+            DialogUtility.showToast(this, getString(R.string.no_internet_connection));
+            finish();
+        }
+
         setContentView(R.layout.activity_widget_settings);
         ButterKnife.bind(this);
 
@@ -69,7 +75,7 @@ public class WidgetSettingsActivity extends ListActivity {
 
             RemoteViews rv = new RemoteViews(getPackageName(), R.layout.widget_ingredients_list);
             rv.setTextViewText(R.id.ingredients_list_title, recipe.getName());
-            rv.setRemoteAdapter(mAppWidgetId, R.id.ingredients_list, intent);
+            rv.setRemoteAdapter(R.id.ingredients_list, intent);
             rv.setEmptyView(R.id.ingredients_list, R.id.empty_view);
             Intent toastIntent = new Intent(this, WidgetProvider.class);
             toastIntent.setAction(WidgetProvider.TOAST_ACTION);

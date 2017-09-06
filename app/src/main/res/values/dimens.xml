@@ -6,10 +6,13 @@
     <dimen name="common_drawable_padding">16dp</dimen>
     <dimen name="card_view_radius">4dp</dimen>
     <dimen name="widget_default_width">200dp</dimen>
-    <dimen name="widget_default_height">100dp</dimen>
+    <dimen name="widget_default_height">200dp</dimen>
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="recipe_instruction_text_size">18sp</dimen>
     <dimen name="video_view_height">300dp</dimen>
     <dimen name="common_widget_padding">5dp</dimen>
     <dimen name="widget_title_text_size">20sp</dimen>
+    <dimen name="divider_height">1dp</dimen>
+    <dimen name="no_video_content_text_size">20sp</dimen>
+    <dimen name="ingredient_name_line_spacing">3dp</dimen>
 </resources>

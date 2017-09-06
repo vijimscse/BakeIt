@@ -1,41 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ingredient_card_view"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:padding="@dimen/common_padding"
     app:cardCornerRadius="@dimen/card_view_radius">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/common_padding"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/common_padding">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
+            android:text="@string/ingredient_title"
             android:textSize="@dimen/recipe_list_item_text_size"
-            android:text="@string/ingredient_title"/>
+            android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/ingredient_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:lineSpacingExtra="3dp"
-            android:layout_marginTop="@dimen/common_padding"
             android:layout_marginLeft="@dimen/common_padding"
+            android:layout_marginStart="@dimen/common_padding"
+            android:layout_marginTop="@dimen/common_padding"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="@dimen/ingredient_name_line_spacing"
             android:textSize="@dimen/recipe_list_item_text_size"
-            tools:text="sdfsdf"
-            android:id="@+id/ingredient_name"/>
+            android:textStyle="bold" />
     </LinearLayout>
-
-
 </android.support.v7.widget.CardView>

@@ -31,10 +31,6 @@ public class Recipe implements Parcelable {
     @Expose
     private String image;
 
-    public Recipe() {
-
-    }
-
     public Recipe(Parcel in) {
         id = in.readInt();
         name = in.readString();

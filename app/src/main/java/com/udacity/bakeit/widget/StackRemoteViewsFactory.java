@@ -1,6 +1,5 @@
 package com.udacity.bakeit.widget;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,39 +17,30 @@ import java.util.List;
 class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private List<Ingredient> mWidgetItems;
     private Context mContext;
-    private int mAppWidgetId;
 
     public StackRemoteViewsFactory(Context context, Intent intent) {
         mContext = context;
-        mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                AppWidgetManager.INVALID_APPWIDGET_ID);
         mWidgetItems = WidgetDataProvider.getInstance().getIngredientList();
     }
 
     @Override
     public void onCreate() {
-
+        //Empty implementation
     }
 
     @Override
     public void onDataSetChanged() {
-
+//Empty implementation
     }
 
     @Override
     public void onDestroy() {
-
+//Empty implementation
     }
 
     @Override
     public int getCount() {
-        int count = 0;
-
-        if (mWidgetItems != null) {
-            count = mWidgetItems.size();
-        }
-
-        return count;
+        return mWidgetItems != null ? mWidgetItems.size() : 0;
     }
 
     public RemoteViews getViewAt(int position) {

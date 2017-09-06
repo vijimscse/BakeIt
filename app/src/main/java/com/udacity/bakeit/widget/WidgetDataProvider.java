@@ -3,6 +3,7 @@ package com.udacity.bakeit.widget;
 import com.udacity.bakeit.dto.Ingredient;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by VijayaLakshmi.IN on 9/4/2017.
@@ -12,7 +13,7 @@ public class WidgetDataProvider {
 
     private static WidgetDataProvider sInstance = new WidgetDataProvider();
 
-    private ArrayList<Ingredient> mIngredientList;
+    private List<Ingredient> mIngredientList;
 
     private WidgetDataProvider() {
 
@@ -22,7 +23,7 @@ public class WidgetDataProvider {
         return sInstance;
     }
 
-    public ArrayList<Ingredient> getIngredientList() {
+    public List<Ingredient> getIngredientList() {
         return mIngredientList;
     }
 

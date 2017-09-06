@@ -19,11 +19,6 @@ public class Ingredient implements Parcelable {
     @Expose
     private String ingredient;
 
-    public Ingredient() {
-        quantity = 1;
-        ingredient = "Test";
-    }
-
     protected Ingredient(Parcel in) {
         quantity = in.readDouble();
         measure = in.readString();
