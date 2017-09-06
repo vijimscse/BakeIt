@@ -13,7 +13,7 @@
         android:textStyle="bold"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
-        android:drawableLeft="@drawable/recipe"
+        android:drawableLeft="@mipmap/recipe"
         android:layout_margin="@dimen/common_padding"
         android:drawablePadding="@dimen/common_drawable_padding"
         android:textSize="@dimen/recipe_list_item_text_size"
