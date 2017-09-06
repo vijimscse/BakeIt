@@ -20,6 +20,7 @@ import com.udacity.bakeit.R;
 import com.udacity.bakeit.base.BaseFragment;
 import com.udacity.bakeit.dto.Step;
 import com.udacity.bakeit.listeners.IRecipeStepFragmentListener;
+import com.udacity.bakeit.utils.NetworkUtility;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -188,11 +189,19 @@ public class RecipeStepDetailsFragment extends BaseFragment {
             ExoPlayerHandler.getInstance().releasePlayer();
 
             if (!TextUtils.isEmpty(step.getVideoURL())) {
-                mSimpleExoPlayerView.setVisibility(View.VISIBLE);
-                mNoVideoContentView.setVisibility(View.GONE);
+                if (!NetworkUtility.isInternetConnected(getActivity())) {
+                    mSimpleExoPlayerView.setVisibility(View.GONE);
+                    mNoVideoContentView.setVisibility(View.VISIBLE);
+                    mNoVideoContentView.setText(getString(R.string.no_internet_connection));
+                } else {
+                    mSimpleExoPlayerView.setVisibility(View.VISIBLE);
+                    mNoVideoContentView.setVisibility(View.GONE);
+
+                }
             } else {
                 mSimpleExoPlayerView.setVisibility(View.GONE);
                 mNoVideoContentView.setVisibility(View.VISIBLE);
+                mNoVideoContentView.setText(getString(R.string.there_is_no_video_demo_for_this_step));
             }
             if (mStepInstructionsView != null) {
                 if (!TextUtils.isEmpty(stepInstruction)) {
