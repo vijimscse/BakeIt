@@ -8,12 +8,12 @@
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/player_view"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/video_view_height" />
+        android:layout_height="match_parent" />
 
     <TextView
         android:id="@+id/no_video_content"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/video_view_height"
+        android:layout_height="match_parent"
         android:layout_margin="@dimen/common_padding"
         android:background="@drawable/black_stroke_border"
         android:gravity="center"

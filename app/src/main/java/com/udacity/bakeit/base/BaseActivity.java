@@ -3,13 +3,11 @@ package com.udacity.bakeit.base;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.udacity.bakeit.R;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -19,9 +17,6 @@ import butterknife.ButterKnife;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private ViewGroup mFragmentContainer;
-
-    @BindView(R.id.toolbar)
-    Toolbar mToolBar;
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -42,21 +37,38 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void setActivityTitle(@StringRes int stringResID) {
         if (stringResID != 0) {
-            mToolBar.setTitle(getString(stringResID));
+            //mToolBar.setTitle(getString(stringResID));
+           // setSupportActionBar();
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(getString(stringResID));
+            }
         } else {
             throw new IllegalStateException("layoutResID can't be zero");
         }
     }
 
     protected void setActivityTitle(String title) {
-        mToolBar.setTitle(title);
+        //mToolBar.setTitle(title);
+        getSupportActionBar().setTitle(title);
     }
 
     protected void hideTitleBar() {
-        mToolBar.setVisibility(View.GONE);
+     //   mToolBar.setVisibility(View.GONE);
     }
 
     protected void showTitleBar() {
-        mToolBar.setVisibility(View.VISIBLE);
+     //   mToolBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

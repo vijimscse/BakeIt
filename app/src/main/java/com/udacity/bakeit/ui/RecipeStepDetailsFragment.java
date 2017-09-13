@@ -2,20 +2,23 @@ package com.udacity.bakeit.ui;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.util.Util;
 import com.udacity.bakeit.R;
 import com.udacity.bakeit.base.BaseFragment;
 import com.udacity.bakeit.dto.Step;
@@ -37,6 +40,7 @@ public class RecipeStepDetailsFragment extends BaseFragment {
     private static final String KEY_CURRENT_POSITION = "key_current_pos";
     private static final String KEY_HAS_NEXT = "key_has_next";
     private static final String KEY_HAS_PREV = "key_has_prev";
+    private static final String KEY_VIDEO_CURRENT_POSITION = "key_video_current_position";
 
     @BindView(R.id.player_view)
     SimpleExoPlayerView mSimpleExoPlayerView;
@@ -61,6 +65,7 @@ public class RecipeStepDetailsFragment extends BaseFragment {
     private boolean mHasNext;
     private Step mStep;
     private IRecipeStepFragmentListener mRecipeStepClickListener;
+    private long mVideoCurrentPosition;
 
     public static RecipeStepDetailsFragment newInstance(Step step, int currentPosition, boolean hasPrev, boolean hasNext) {
         final RecipeStepDetailsFragment recipeStepDetailsFragment = new RecipeStepDetailsFragment();
@@ -93,6 +98,7 @@ public class RecipeStepDetailsFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
 
         final Bundle bundle = getArguments();
+        setHasOptionsMenu(true);
 
         if (bundle != null) {
             mStep = bundle.getParcelable(KEY_STEP);
@@ -108,6 +114,11 @@ public class RecipeStepDetailsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_step_details, container, false);
         ButterKnife.bind(this, view);
 
+
+        return view;
+    }
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         if ((!getResources().getBoolean(R.bool.tablet_mode)) &&
                 getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             supportUIforPhoneLandscape();
@@ -116,12 +127,31 @@ public class RecipeStepDetailsFragment extends BaseFragment {
                 mRecipeStepClickListener.showToolBar();
             }
             supportUIforTablet();
+
+            ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setHomeButtonEnabled(true);
+            }
         }
 
         restoreDataFromBundle(savedInstanceState);
         updateStepDetails(mStep, mCurrentStepPosition, mHasPrev, mHasNext);
+    }
 
-        return view;
+    // This snippet hides the system bars.
+    private void hideSystemUI() {
+        getActivity().getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+    }
+    private void expandVideoView() {
+        mSimpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+        mSimpleExoPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
     }
 
     private void supportUIforTablet() {
@@ -134,19 +164,19 @@ public class RecipeStepDetailsFragment extends BaseFragment {
         noVideoContentLp.height = (int) getResources().getDimension(R.dimen.video_view_height);
         noVideoContentLp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
         mNoVideoContentView.setLayoutParams(lp);
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     private void supportUIforPhoneLandscape() {
         mRecipeStepClickListener.hideToolBar();
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mSimpleExoPlayerView.getLayoutParams();
-        lp.height = RelativeLayout.LayoutParams.MATCH_PARENT;
-        lp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-        mSimpleExoPlayerView.setLayoutParams(lp);
 
         FrameLayout.LayoutParams noVideoContentLp = (FrameLayout.LayoutParams) mNoVideoContentView.getLayoutParams();
         noVideoContentLp.height = RelativeLayout.LayoutParams.MATCH_PARENT;
         noVideoContentLp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-        mNoVideoContentView.setLayoutParams(lp);
+        mNoVideoContentView.setLayoutParams(noVideoContentLp);
+
+        hideSystemUI();
+        expandVideoView();
     }
 
     private void restoreDataFromBundle(Bundle savedInstanceState) {
@@ -155,6 +185,7 @@ public class RecipeStepDetailsFragment extends BaseFragment {
             mCurrentStepPosition = savedInstanceState.getInt(KEY_CURRENT_POSITION);
             mHasPrev = savedInstanceState.getBoolean(KEY_HAS_PREV);
             mHasNext = savedInstanceState.getBoolean(KEY_HAS_NEXT);
+            mVideoCurrentPosition = savedInstanceState.getLong(KEY_VIDEO_CURRENT_POSITION);
         }
     }
 
@@ -166,17 +197,20 @@ public class RecipeStepDetailsFragment extends BaseFragment {
         outState.putInt(KEY_CURRENT_POSITION, mCurrentStepPosition);
         outState.putBoolean(KEY_HAS_PREV, mHasPrev);
         outState.putBoolean(KEY_HAS_NEXT, mHasNext);
+        outState.putLong(KEY_VIDEO_CURRENT_POSITION, mVideoCurrentPosition);
     }
 
     @Optional
     @OnClick(R.id.ingredient_prev)
     public void onPrev() {
+        mVideoCurrentPosition = 0;
         mRecipeStepClickListener.onPrev(mCurrentStepPosition);
     }
 
     @Optional
     @OnClick(R.id.ingredient_next)
     public void onNext() {
+        mVideoCurrentPosition = 0;
         mRecipeStepClickListener.onNext(mCurrentStepPosition);
     }
 
@@ -215,40 +249,41 @@ public class RecipeStepDetailsFragment extends BaseFragment {
                 mPrev.setVisibility(hasPrev ? View.VISIBLE : View.GONE);
                 mNext.setVisibility(hasNext ? View.VISIBLE : View.GONE);
             }
-
-            ExoPlayerHandler.getInstance().prepare(getActivity(), Uri.parse(mStep.getVideoURL()),
-                    mSimpleExoPlayerView);
-            ExoPlayerHandler.getInstance().putForeground();
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        preparePlayer();
+    }
 
-        ExoPlayerHandler.getInstance().putForeground();
+    public void preparePlayer() {
+        if ((Util.SDK_INT <= 23) && !TextUtils.isEmpty(mStep.getVideoURL())) {
+            ExoPlayerHandler.getInstance().prepare(getActivity(), mStep.getVideoURL(), mSimpleExoPlayerView, mVideoCurrentPosition);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
-        ExoPlayerHandler.getInstance().putBackground();
+        if (Util.SDK_INT <= 23) {
+            mVideoCurrentPosition = ExoPlayerHandler.getInstance().getCurrentPosition();
+            ExoPlayerHandler.getInstance().releasePlayer();
+        }
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        ExoPlayerHandler.getInstance().putBackground();
-        ExoPlayerHandler.getInstance().releasePlayer();
+    public void onStart() {
+        super.onStart();
+        preparePlayer();
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        ExoPlayerHandler.getInstance().putBackground();
-        ExoPlayerHandler.getInstance().releasePlayer();
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            ExoPlayerHandler.getInstance().releasePlayer();
+        }
     }
 }

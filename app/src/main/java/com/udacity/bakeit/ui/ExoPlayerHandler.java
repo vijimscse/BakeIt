@@ -2,6 +2,7 @@ package com.udacity.bakeit.ui;
 
 import android.content.Context;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.view.SurfaceView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -17,7 +18,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
 /**
  * ExoPlayerHandler - Singleton class used for handling the preparing video and releasing when required.
- *
+ * <p>
  * Created by VijayaLakshmi.IN on 9/5/2017.
  */
 // Reference: https://medium.com/tall-programmer/fullscreen-functionality-with-android-exoplayer-5fddad45509f
@@ -32,32 +33,36 @@ public class ExoPlayerHandler {
     }
 
     private SimpleExoPlayer mExoPlayer;
-    private Uri mUriString;
+    private Uri mUri;
     private boolean isPlayerPlaying = true;
 
     private ExoPlayerHandler() {
     }
 
-    public void prepare(Context context, Uri uri, SimpleExoPlayerView exoPlayerView) {
-        if (context != null && uri != null && exoPlayerView != null) {
-            if (!uri.equals(mUriString) || mExoPlayer == null) {
-                mUriString = uri;
-                mExoPlayer = ExoPlayerFactory.newSimpleInstance(
-                        new DefaultRenderersFactory(context),
-                        new DefaultTrackSelector(), new DefaultLoadControl());
-                MediaSource mediaSource = buildMediaSource(uri);
-                mExoPlayer.prepare(mediaSource);
+    public void prepare(Context context, String str, SimpleExoPlayerView exoPlayerView, long currentPos) {
+        if (context != null && exoPlayerView != null) {
+            if (!TextUtils.isEmpty(str)) {
+                Uri tempUri = Uri.parse(str);
+                if (!tempUri.equals(mUri) || mExoPlayer == null) {
+                    mUri = tempUri;
+                    mExoPlayer = ExoPlayerFactory.newSimpleInstance(
+                            new DefaultRenderersFactory(context),
+                            new DefaultTrackSelector(), new DefaultLoadControl());
+                    MediaSource mediaSource = buildMediaSource();
+                    mExoPlayer.prepare(mediaSource);
+                }
+                mExoPlayer.clearVideoSurface();
+                mExoPlayer.setVideoSurfaceView(
+                        (SurfaceView) exoPlayerView.getVideoSurfaceView());
+                mExoPlayer.seekTo(currentPos + 1);
+                exoPlayerView.setPlayer(mExoPlayer);
+                putForeground();
             }
-            mExoPlayer.clearVideoSurface();
-            mExoPlayer.setVideoSurfaceView(
-                    (SurfaceView) exoPlayerView.getVideoSurfaceView());
-            mExoPlayer.seekTo(mExoPlayer.getCurrentPosition() + 1);
-            exoPlayerView.setPlayer(mExoPlayer);
         }
     }
 
-    private MediaSource buildMediaSource(Uri uri) {
-        return new ExtractorMediaSource(uri, new DefaultHttpDataSourceFactory("ua"),
+    private MediaSource buildMediaSource() {
+        return new ExtractorMediaSource(mUri, new DefaultHttpDataSourceFactory("ua"),
                 new DefaultExtractorsFactory(), null, null);
     }
 
@@ -79,5 +84,15 @@ public class ExoPlayerHandler {
             mExoPlayer.release();
         }
         mExoPlayer = null;
+    }
+
+    public long getCurrentPosition() {
+        long currentPlayPosition = 0;
+
+        if (mExoPlayer != null) {
+            currentPlayPosition = mExoPlayer.getCurrentPosition();
+        }
+
+        return currentPlayPosition;
     }
 }

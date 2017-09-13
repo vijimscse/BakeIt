@@ -104,6 +104,7 @@ public class RecipeDetailActivity extends BaseActivity implements IRecipeStepFra
         if (nextPos < mSelectedRecipe.getSteps().size() && mRecipeStepDetailsFragment != null) {
             mRecipeStepDetailsFragment.updateStepDetails(mSelectedRecipe.getSteps().get(nextPos),
                     nextPos, nextPos > 0, (nextPos < (mSelectedRecipe.getSteps().size() - 1)));
+            mRecipeStepDetailsFragment.preparePlayer();
         }
     }
 
@@ -113,6 +114,7 @@ public class RecipeDetailActivity extends BaseActivity implements IRecipeStepFra
         if (prevPos >= 0 && mRecipeStepDetailsFragment != null) {
             mRecipeStepDetailsFragment.updateStepDetails(mSelectedRecipe.getSteps().get(prevPos),
                     prevPos, prevPos > 0, (prevPos < (mSelectedRecipe.getSteps().size() - 1)));
+            mRecipeStepDetailsFragment.preparePlayer();
         }
     }
 

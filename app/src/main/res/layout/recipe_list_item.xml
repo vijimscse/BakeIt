@@ -4,6 +4,7 @@
     android:id="@+id/recipe_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
     android:padding="@dimen/common_padding"
     app:cardCornerRadius="@dimen/card_view_radius">
 
@@ -17,8 +18,8 @@
             android:id="@+id/recipe_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/recipe"
-            android:layout_margin="@dimen/common_padding"/>
+            android:layout_margin="@dimen/common_padding"
+            android:src="@drawable/recipe" />
 
         <TextView
             android:id="@+id/recipe_name"
