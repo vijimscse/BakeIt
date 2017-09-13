@@ -78,7 +78,7 @@ public class RecipeStepIngredientsFragment extends BaseFragment implements IReci
         if (getActivity() != null && bundle != null) {
             Recipe selectedRecipe = bundle.getParcelable(IBundleKeys.SELECTED_RECIPE);
             if (selectedRecipe != null) {
-                mRecyclerView.setAdapter(new RecipeStepListAdapter(this,
+                mRecyclerView.setAdapter(new RecipeStepListAdapter(getActivity(), this,
                         selectedRecipe.getSteps(), selectedRecipe.getIngredients()));
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

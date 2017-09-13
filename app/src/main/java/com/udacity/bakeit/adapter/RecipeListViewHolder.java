@@ -2,6 +2,7 @@ package com.udacity.bakeit.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.udacity.bakeit.R;
@@ -19,6 +20,9 @@ public class RecipeListViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.recipe_name)
     TextView mRecipeName;
+
+    @BindView(R.id.recipe_image)
+    ImageView mRecipeImage;
 
     private IRecipeListItemClickListener mRecipeClickListener;
 

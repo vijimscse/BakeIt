@@ -1,10 +1,13 @@
 package com.udacity.bakeit.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.picasso.Picasso;
 import com.udacity.bakeit.R;
 import com.udacity.bakeit.dto.Ingredient;
 import com.udacity.bakeit.dto.Step;
@@ -18,6 +21,7 @@ import java.util.List;
 
 public class RecipeStepListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private final Context mContext;
     private List<Ingredient> mIngredientList;
     private List<Step> mStepList;
     private IRecipeStepItemClickListener mRecipeStepClickListener;
@@ -25,8 +29,9 @@ public class RecipeStepListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private static final int ITEM_INGREDIENT = 101;
     private static final int ITEM_STEP = 100;
 
-    public RecipeStepListAdapter(IRecipeStepItemClickListener recipeClickListener,
+    public RecipeStepListAdapter(Context context, IRecipeStepItemClickListener recipeClickListener,
                                  List<Step> stepList, List<Ingredient> ingredientList) {
+        mContext = context;
         mRecipeStepClickListener = recipeClickListener;
         mStepList = stepList;
         mIngredientList = ingredientList;
@@ -69,6 +74,17 @@ public class RecipeStepListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             Step step = mStepList.get(position);
 
             stepViewHolder.mStepName.setText(step.getShortDescription());
+
+            final String image = step.getThumbnailURL();
+            if (!TextUtils.isEmpty(image)) {
+                Picasso.with(mContext)
+                        .load(image)
+                        .placeholder(R.drawable.recipe_step)
+                        .error(R.drawable.recipe_step)
+                        .into(stepViewHolder.mStepImage);
+            } else {
+                stepViewHolder.mStepImage.setImageResource(R.drawable.recipe_step);
+            }
         }
     }
 

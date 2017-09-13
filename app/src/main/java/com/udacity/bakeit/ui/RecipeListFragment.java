@@ -134,7 +134,7 @@ public class RecipeListFragment extends BaseFragment implements IRecipeListItemC
      * Initialises the views
      */
     private void initViews() {
-        mRecyclerListAdapter = new RecipeListAdapter(this, mRecipeList);
+        mRecyclerListAdapter = new RecipeListAdapter(getActivity(), this, mRecipeList);
         mRecyclerView.setAdapter(mRecyclerListAdapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), mGridColumnCount));
 

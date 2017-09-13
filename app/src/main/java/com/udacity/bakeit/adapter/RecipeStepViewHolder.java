@@ -2,6 +2,7 @@ package com.udacity.bakeit.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.udacity.bakeit.R;
@@ -18,6 +19,9 @@ public class RecipeStepViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.step_name)
     TextView mStepName;
+
+    @BindView(R.id.step_image)
+    public ImageView mStepImage;
 
     private IRecipeStepItemClickListener mRecipeClickListener;
 
