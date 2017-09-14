@@ -2,6 +2,8 @@ package com.udacity.bakeit.ui;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 import android.view.SurfaceView;
 
@@ -25,6 +27,13 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 public class ExoPlayerHandler {
     private static ExoPlayerHandler sInstance;
 
+    private SimpleExoPlayer mExoPlayer;
+    private Uri mUri;
+    private MediaSessionCompat mMediaSessionCompat;
+
+    private ExoPlayerHandler() {
+    }
+
     public static ExoPlayerHandler getInstance() {
         if (sInstance == null) {
             sInstance = new ExoPlayerHandler();
@@ -32,15 +41,24 @@ public class ExoPlayerHandler {
         return sInstance;
     }
 
-    private SimpleExoPlayer mExoPlayer;
-    private Uri mUri;
-    private boolean isPlayerPlaying = true;
-
-    private ExoPlayerHandler() {
-    }
-
+    /**
+     * Intialises the video player
+     *
+     * @param context
+     * @param str
+     * @param exoPlayerView
+     * @param currentPos
+     */
     public void prepare(Context context, String str, SimpleExoPlayerView exoPlayerView, long currentPos) {
         if (context != null && exoPlayerView != null) {
+
+            mMediaSessionCompat = new MediaSessionCompat(context, ExoPlayerHandler.class.getSimpleName());
+            mMediaSessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+            mMediaSessionCompat.setMediaButtonReceiver(null);
+            setPlaybackStateBuilder();
+            setPlayerCallbackListener();
+            mMediaSessionCompat.setActive(true);
+
             if (!TextUtils.isEmpty(str)) {
                 Uri tempUri = Uri.parse(str);
                 if (!tempUri.equals(mUri) || mExoPlayer == null) {
@@ -48,44 +66,82 @@ public class ExoPlayerHandler {
                     mExoPlayer = ExoPlayerFactory.newSimpleInstance(
                             new DefaultRenderersFactory(context),
                             new DefaultTrackSelector(), new DefaultLoadControl());
+                    exoPlayerView.setPlayer(mExoPlayer);
                     MediaSource mediaSource = buildMediaSource();
                     mExoPlayer.prepare(mediaSource);
+                    mExoPlayer.setPlayWhenReady(true);
                 }
                 mExoPlayer.clearVideoSurface();
                 mExoPlayer.setVideoSurfaceView(
                         (SurfaceView) exoPlayerView.getVideoSurfaceView());
                 mExoPlayer.seekTo(currentPos + 1);
-                exoPlayerView.setPlayer(mExoPlayer);
-                putForeground();
             }
         }
     }
 
+    /**
+     * Initialises the state builder
+     */
+    public void setPlaybackStateBuilder() {
+        PlaybackStateCompat.Builder stateBuilder = new PlaybackStateCompat.Builder().setActions(PlaybackStateCompat.ACTION_PLAY |
+                                PlaybackStateCompat.ACTION_PAUSE |
+                                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
+                                PlaybackStateCompat.ACTION_PLAY_PAUSE);
+        mMediaSessionCompat.setPlaybackState(stateBuilder.build());
+    }
+
+    /**
+     * Callback listener for player
+     */
+    public void setPlayerCallbackListener() {
+        mMediaSessionCompat.setCallback(new MediaSessionCompat.Callback() {
+            @Override
+            public void onPlay() {
+                mExoPlayer.setPlayWhenReady(true);
+            }
+
+            @Override
+            public void onPause() {
+                mExoPlayer.setPlayWhenReady(false);
+            }
+
+            @Override
+            public void onSkipToPrevious() {
+                mExoPlayer.seekTo(0);
+            }
+        });
+    }
+
+    /**
+     * Media source builder
+     *
+     * @return
+     */
     private MediaSource buildMediaSource() {
         return new ExtractorMediaSource(mUri, new DefaultHttpDataSourceFactory("ua"),
                 new DefaultExtractorsFactory(), null, null);
     }
 
-    public void putBackground() {
-        if (mExoPlayer != null) {
-            isPlayerPlaying = mExoPlayer.getPlayWhenReady();
-            mExoPlayer.setPlayWhenReady(false);
-        }
-    }
-
-    public void putForeground() {
-        if (mExoPlayer != null) {
-            mExoPlayer.setPlayWhenReady(isPlayerPlaying);
-        }
-    }
-
+    /**
+     * Releases the player and the memory held by player and sessions.
+     */
     public void releasePlayer() {
         if (mExoPlayer != null) {
+            mExoPlayer.stop();
             mExoPlayer.release();
+        }
+        if (mMediaSessionCompat != null) {
+            mMediaSessionCompat.setActive(false);
+            mMediaSessionCompat = null;
         }
         mExoPlayer = null;
     }
 
+    /**
+     * Provides the current playback position
+     *
+     * @return
+     */
     public long getCurrentPosition() {
         long currentPlayPosition = 0;
 

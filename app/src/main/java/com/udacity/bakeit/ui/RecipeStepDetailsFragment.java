@@ -114,9 +114,12 @@ public class RecipeStepDetailsFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_step_details, container, false);
         ButterKnife.bind(this, view);
 
+        restoreDataFromBundle(savedInstanceState);
+        updateStepDetails(mStep, mCurrentStepPosition, mHasPrev, mHasNext);
 
         return view;
     }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         if ((!getResources().getBoolean(R.bool.tablet_mode)) &&
@@ -134,9 +137,6 @@ public class RecipeStepDetailsFragment extends BaseFragment {
                 actionBar.setHomeButtonEnabled(true);
             }
         }
-
-        restoreDataFromBundle(savedInstanceState);
-        updateStepDetails(mStep, mCurrentStepPosition, mHasPrev, mHasNext);
     }
 
     // This snippet hides the system bars.
@@ -228,6 +228,7 @@ public class RecipeStepDetailsFragment extends BaseFragment {
                     mNoVideoContentView.setVisibility(View.VISIBLE);
                     mNoVideoContentView.setText(getString(R.string.no_internet_connection));
                 } else {
+                    preparePlayer();
                     mSimpleExoPlayerView.setVisibility(View.VISIBLE);
                     mNoVideoContentView.setVisibility(View.GONE);
 

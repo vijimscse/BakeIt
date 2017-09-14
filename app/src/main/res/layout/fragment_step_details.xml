@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:context=".ui.RecipeDetailActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,9 +25,9 @@
                 android:id="@+id/no_video_content"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/video_view_height"
-                android:gravity="center"
                 android:layout_margin="@dimen/common_padding"
                 android:background="@drawable/black_stroke_border"
+                android:gravity="center"
                 android:text="@string/there_is_no_video_demo_for_this_step"
                 android:textSize="@dimen/no_video_content_text_size"
                 android:textStyle="bold" />
@@ -35,8 +37,8 @@
             android:id="@+id/recipe_step_instructions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/common_padding"
-            android:layout_below="@+id/player_container" />
+            android:layout_below="@+id/player_container"
+            android:layout_marginTop="@dimen/common_padding" />
 
         <Button
             android:id="@+id/ingredient_prev"
@@ -47,8 +49,8 @@
             android:layout_below="@id/recipe_step_instructions"
             android:layout_margin="@dimen/common_padding"
             android:padding="@dimen/common_padding"
-            android:textSize="@dimen/recipe_instruction_text_size"
-            android:text="@string/previous" />
+            android:text="@string/previous"
+            android:textSize="@dimen/recipe_instruction_text_size" />
 
         <Button
             android:id="@+id/ingredient_next"
