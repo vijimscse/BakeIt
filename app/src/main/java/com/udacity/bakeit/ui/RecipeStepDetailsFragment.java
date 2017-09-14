@@ -269,7 +269,7 @@ public class RecipeStepDetailsFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
         if (Util.SDK_INT <= 23) {
-            mVideoCurrentPosition = ExoPlayerHandler.getInstance().getCurrentPosition();
+            mVideoCurrentPosition = ExoPlayerHandler.getInstance().getCurrentPlaybackPosition();
             ExoPlayerHandler.getInstance().releasePlayer();
         }
     }

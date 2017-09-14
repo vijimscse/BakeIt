@@ -142,7 +142,7 @@ public class ExoPlayerHandler {
      *
      * @return
      */
-    public long getCurrentPosition() {
+    public long getCurrentPlaybackPosition() {
         long currentPlayPosition = 0;
 
         if (mExoPlayer != null) {
