@@ -9,6 +9,7 @@ import com.udacity.bakeit.R;
 
 /**
  * Created by VijayaLakshmi.IN on 8/26/2017.
+ * Item decorator for {@link RecipeListFragment}
  */
 public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
     private int space;

@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by VijayaLakshmi.IN on 8/26/2017.
+ * Base class to provide basic UI
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -27,7 +28,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void initialiseContainer(@LayoutRes int layoutResID) {
         if (layoutResID != 0) {
-            mFragmentContainer = (ViewGroup) findViewById(R.id.fragment_container);
+            mFragmentContainer =  findViewById(R.id.fragment_container);
             mFragmentContainer.addView(getLayoutInflater().inflate(layoutResID, null, false));
             ButterKnife.bind(this);
         } else {
@@ -37,8 +38,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void setActivityTitle(@StringRes int stringResID) {
         if (stringResID != 0) {
-            //mToolBar.setTitle(getString(stringResID));
-           // setSupportActionBar();
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(getString(stringResID));
             }
@@ -48,16 +47,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void setActivityTitle(String title) {
-        //mToolBar.setTitle(title);
         getSupportActionBar().setTitle(title);
     }
 
     protected void hideTitleBar() {
-     //   mToolBar.setVisibility(View.GONE);
+     //Empty implementation
     }
 
     protected void showTitleBar() {
-     //   mToolBar.setVisibility(View.VISIBLE);
+        //Empty implementation
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.udacity.bakeit.utils.IBundleKeys;
 
 /**
  * Created by VijayaLakshmi.IN on 8/27/2017.
+ * Displays recipe details
  */
 
 public class RecipeDetailActivity extends BaseActivity implements IRecipeStepFragmentListener {

@@ -13,4 +13,6 @@
     <dimen name="divider_height">1dp</dimen>
     <dimen name="no_video_content_text_size">20sp</dimen>
     <dimen name="ingredient_name_line_spacing">3dp</dimen>
+    <dimen name="tools_absolutey">81dp</dimen>
+    <dimen name="tools_absolutex">0dp</dimen>
 </resources>

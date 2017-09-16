@@ -6,10 +6,15 @@ import android.net.NetworkInfo;
 
 /**
  * Created by Vijayalakshmi.IN on 7/13/2017.
- * Class used for checking the internet connection
+ * Class used for network related method
  */
 public class NetworkUtility {
 
+    /**
+     *
+     * @param context
+     * @return true if internet is available
+     */
     public static boolean isInternetConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 /**
  * Created by VijayaLakshmi.IN on 9/4/2017.
+ * Displays recipe list on {@link WidgetSettingsActivity}
  */
 
 public class WidgetRecipeListAdapter extends ArrayAdapter<Recipe> {
@@ -47,7 +48,7 @@ public class WidgetRecipeListAdapter extends ArrayAdapter<Recipe> {
         return convertView;
     }
 
-    static class WidgetRecipeViewHolder {
+    private static class WidgetRecipeViewHolder {
         TextView mRecipeName;
     }
 }

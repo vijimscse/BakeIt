@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * Created by VijayaLakshmi.IN on 8/26/2017.
+ * Adapter for recipe list
  */
 
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListViewHolder> {

@@ -21,6 +21,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
  * Created by VijayaLakshmi.IN on 9/5/2017.
+ * Tests UI for {@link RecipeDetailActivity}
  */
 
 @RunWith(AndroidJUnit4.class)
@@ -28,15 +29,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class StepDetailFragmentUiTest {
 
     @Rule
-    public ActivityTestRule<RecipeDetailActivity> rule = new ActivityTestRule<>(RecipeDetailActivity.class, true, false);
+    public ActivityTestRule<RecipeDetailActivity> mRecipeDetailActivityActivityTestRule = new ActivityTestRule<>(RecipeDetailActivity.class, true, false);
 
-    private RecipeStepDetailsFragment fragment;
-    private RecipeDetailActivity activity;
+    private RecipeStepDetailsFragment mRecipeStepDetailsFragment;
+    private RecipeDetailActivity mRecipeDetailActivity;
 
     @Before
     public void setup() {
         // Setup shared mock information or do your dependency injection
-        fragment = new RecipeStepDetailsFragment();
+        mRecipeStepDetailsFragment = new RecipeStepDetailsFragment();
     }
 
 
@@ -44,10 +45,10 @@ public class StepDetailFragmentUiTest {
     public void fragmentTest() {
         // Setup your test specific mocks here
 
-        activity = rule.launchActivity(new Intent());
-        activity.getSupportFragmentManager()
+        mRecipeDetailActivity = mRecipeDetailActivityActivityTestRule.launchActivity(new Intent());
+        mRecipeDetailActivity.getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.steps_ingredients_container, fragment)
+                .replace(R.id.steps_ingredients_container, mRecipeStepDetailsFragment)
                 .commit();
 
         onView(withId(R.id.ingredient_next)).check(matches(isClickable()));

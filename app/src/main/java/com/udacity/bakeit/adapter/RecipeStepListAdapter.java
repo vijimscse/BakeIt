@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * Created by VijayaLakshmi.IN on 8/27/2017.
+ * Adapter for recipe step list
  */
 
 public class RecipeStepListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

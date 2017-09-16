@@ -3,6 +3,7 @@ package com.udacity.bakeit.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,13 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.udacity.bakeit.R;
 import com.udacity.bakeit.adapter.RecipeListAdapter;
 import com.udacity.bakeit.base.BaseFragment;
 import com.udacity.bakeit.dto.Recipe;
+import com.udacity.bakeit.idlengresource.RecipeListIdlingResource;
 import com.udacity.bakeit.io.IOManager;
 import com.udacity.bakeit.listeners.IRecipeListItemClickListener;
+import com.udacity.bakeit.utils.CollectionUtils;
 import com.udacity.bakeit.utils.DialogUtility;
 import com.udacity.bakeit.utils.IBundleKeys;
 import com.udacity.bakeit.utils.NetworkUtility;
@@ -36,6 +40,7 @@ import static com.udacity.bakeit.utils.IBundleKeys.SELECTED_RECIPE;
 
 /**
  * Created by VijayaLakshmi.IN on 8/26/2017.
+ * Displays recipe list
  */
 public class RecipeListFragment extends BaseFragment implements IRecipeListItemClickListener {
 
@@ -45,11 +50,15 @@ public class RecipeListFragment extends BaseFragment implements IRecipeListItemC
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
 
+    @BindView(R.id.empty_view)
+    TextView mEmptyTextView;
+
     @BindInt(R.integer.grid_column_count)
     int mGridColumnCount;
 
     private ArrayList<Recipe> mRecipeList = new ArrayList<>();
     private RecipeListAdapter mRecyclerListAdapter;
+    private RecipeListIdlingResource mIdlingResource;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,24 +99,37 @@ public class RecipeListFragment extends BaseFragment implements IRecipeListItemC
             if (mRecipeList == null || mRecipeList.isEmpty()) {
                 if (NetworkUtility.isInternetConnected(getActivity())) {
                     showProgressBar();
+                    if (mIdlingResource != null) {
+                        mIdlingResource.setIdleState(false);
+                    }
                     IOManager.requestRecipeList(new Callback<List<Recipe>>() {
                         @Override
                         public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                            if (mIdlingResource != null) {
+                                mIdlingResource.setIdleState(true);
+                            }
                             hideProgressBar();
                             mRecipeList.clear();
-                            mRecipeList.addAll(response.body());
-                            mRecyclerListAdapter.notifyDataSetChanged();
+                            if (!CollectionUtils.isEmpty(response.body())) {
+                                mRecipeList.addAll(response.body());
+                                mRecyclerListAdapter.notifyDataSetChanged();
+                            } else {
+                                mEmptyTextView.setVisibility(View.VISIBLE);
+                            }
                         }
 
                         @Override
                         public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                            if (mIdlingResource != null) {
+                                mIdlingResource.setIdleState(true);
+                            }
                             hideProgressBar();
-                            DialogUtility.showToast(getActivity(), getString(R.string.generic_error));
+                            DialogUtility.showMessage(getView(), R.string.generic_error);
                         }
                     });
                 } else {
                     hideProgressBar();
-                    DialogUtility.showToast(getActivity(), getString(R.string.no_internet_connection));
+                    DialogUtility.showMessage(getView(), R.string.no_internet_connection);
                 }
             } else {
                 hideProgressBar();
@@ -171,5 +193,12 @@ public class RecipeListFragment extends BaseFragment implements IRecipeListItemC
         intent.putExtras(bundle);
 
         startActivity(intent);
+    }
+
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new RecipeListIdlingResource();
+        }
+        return mIdlingResource;
     }
 }

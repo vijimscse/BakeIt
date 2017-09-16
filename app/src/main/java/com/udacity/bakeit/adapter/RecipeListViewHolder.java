@@ -14,6 +14,7 @@ import butterknife.OnClick;
 
 /**
  * Created by VijayaLakshmi.IN on 8/26/2017.
+ * View holder for recipe list
  */
 
 public class RecipeListViewHolder extends RecyclerView.ViewHolder {

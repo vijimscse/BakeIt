@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -31,11 +30,11 @@ import retrofit2.Response;
 
 /**
  * Created by VijayaLakshmi.IN on 9/2/2017.
+ * Provides a widget setting screen.
  */
 
 public class WidgetSettingsActivity extends ListActivity {
 
-    private static final String TAG = WidgetSettingsActivity.class.getSimpleName();
 
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
@@ -68,7 +67,6 @@ public class WidgetSettingsActivity extends ListActivity {
             if (recipe == null) {
                 return;
             }
-            Log.d(TAG, "recipe " + recipe.getName());
             ArrayList<Ingredient> ingredientList = (ArrayList<Ingredient>) recipe.getIngredients();
             WidgetDataProvider.getInstance().setIngredientList(ingredientList);
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
@@ -94,7 +92,7 @@ public class WidgetSettingsActivity extends ListActivity {
             setResult(RESULT_OK, intent);
             finish();
         } else {
-            DialogUtility.showToast(this, getString(R.string.select_recipe));
+            DialogUtility.showMessage(getListView(), R.string.select_recipe);
         }
     }
 
@@ -122,11 +120,12 @@ public class WidgetSettingsActivity extends ListActivity {
                     public void onFailure(Call<List<Recipe>> call, Throwable t) {
                         hideProgressBar();
                         DialogUtility.showToast(WidgetSettingsActivity.this, getString(R.string.generic_error));
+                        finish();
                     }
                 });
             } else {
                 hideProgressBar();
-                DialogUtility.showToast(this, getString(R.string.no_internet_connection));
+                DialogUtility.showMessage(getListView(), R.string.no_internet_connection);
             }
         } else {
             hideProgressBar();

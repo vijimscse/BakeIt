@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Created by VijayaLakshmi.IN on 9/4/2017.
+ * Displays stack view for widget
  */
 class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private List<Ingredient> mWidgetItems;
@@ -30,12 +31,12 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onDataSetChanged() {
-//Empty implementation
+        //Empty implementation
     }
 
     @Override
     public void onDestroy() {
-//Empty implementation
+        //Empty implementation
     }
 
     @Override

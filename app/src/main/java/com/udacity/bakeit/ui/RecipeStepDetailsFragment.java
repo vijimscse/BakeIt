@@ -18,7 +18,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.util.Util;
 import com.udacity.bakeit.R;
 import com.udacity.bakeit.base.BaseFragment;
 import com.udacity.bakeit.dto.Step;
@@ -32,6 +31,7 @@ import butterknife.Optional;
 
 /**
  * Created by VijayaLakshmi.IN on 8/27/2017.
+ * Displays video and step details
  */
 
 public class RecipeStepDetailsFragment extends BaseFragment {
@@ -131,7 +131,7 @@ public class RecipeStepDetailsFragment extends BaseFragment {
             }
             supportUIforTablet();
 
-            ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             if (actionBar != null) {
                 actionBar.setDisplayHomeAsUpEnabled(true);
                 actionBar.setHomeButtonEnabled(true);
@@ -149,6 +149,7 @@ public class RecipeStepDetailsFragment extends BaseFragment {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
+
     private void expandVideoView() {
         mSimpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
         mSimpleExoPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -260,7 +261,7 @@ public class RecipeStepDetailsFragment extends BaseFragment {
     }
 
     public void preparePlayer() {
-        if ((Util.SDK_INT <= 23) && !TextUtils.isEmpty(mStep.getVideoURL())) {
+        if (mStep != null && !TextUtils.isEmpty(mStep.getVideoURL())) {
             ExoPlayerHandler.getInstance().prepare(getActivity(), mStep.getVideoURL(), mSimpleExoPlayerView, mVideoCurrentPosition);
         }
     }
@@ -268,10 +269,8 @@ public class RecipeStepDetailsFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (Util.SDK_INT <= 23) {
-            mVideoCurrentPosition = ExoPlayerHandler.getInstance().getCurrentPlaybackPosition();
-            ExoPlayerHandler.getInstance().releasePlayer();
-        }
+        mVideoCurrentPosition = ExoPlayerHandler.getInstance().getCurrentPlaybackPosition();
+        ExoPlayerHandler.getInstance().releasePlayer();
     }
 
     @Override
@@ -283,8 +282,6 @@ public class RecipeStepDetailsFragment extends BaseFragment {
     @Override
     public void onStop() {
         super.onStop();
-        if (Util.SDK_INT > 23) {
-            ExoPlayerHandler.getInstance().releasePlayer();
-        }
+        ExoPlayerHandler.getInstance().releasePlayer();
     }
 }

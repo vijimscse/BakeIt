@@ -20,6 +20,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasCom
 
 /**
  * Created by VijayaLakshmi.IN on 9/5/2017.
+ * Tests intent launch for {@link RecipeDetailActivity}
  */
 
 @RunWith(AndroidJUnit4.class)

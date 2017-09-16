@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="@dimen/tools_absolutex"
+    tools:layout_editor_absoluteY="@dimen/tools_absolutey"
     tools:context=".widget.WidgetSettingsActivity">
 
     <TextView

@@ -10,5 +10,6 @@
     <string name="there_is_no_video_demo_for_this_step">There is no video demo for this step</string>
     <string name="previous">Prev</string>
     <string name="next">Next</string>
+    <string name="no_data_available">No recipies found</string>
 
 </resources>
